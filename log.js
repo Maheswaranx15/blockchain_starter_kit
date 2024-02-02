@@ -19,10 +19,6 @@ const getTransactions = async(address, numTx) => {
     })
 }
 
-
-// const solanaWeb3 = require('@solana/web3.js')
-// const connection = new solanaWeb3.Connection("https://crimson-thrumming-grass.solana-mainnet.quiknode.pro/ff7ae722ce0ac86c3fa1456a05bee9e97170f81d/")
-
 const getTransactions_logs = async() => {
   let transaction = await solanaConnection.onAccountChange(new solanaWeb3.PublicKey("9qAFHpSVmi2sKCYcJt9mvAzzfjCCbF1YczSirsh3BooT"),
     (updatedAccountInfo, context) => console.log("Updated account info: ", updatedAccountInfo),
