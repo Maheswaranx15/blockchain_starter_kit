@@ -27,4 +27,4 @@ const getTransactions_logs = async() => {
 }
 
 getTransactions_logs()
-getTransactions("ALkXoJ7daxtcE7sauzg8NVpwKQ8q8aE7AdoyMzX9FTTY",5)
+getTransactions(searchAddress,5)
