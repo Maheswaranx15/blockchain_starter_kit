@@ -129,8 +129,8 @@ fn main() {
     }
 
     // structs 
-    let name = String :: from("peocock");
-    let bird = Bird{name : "pecock".to_owned(), attack : 5};
+    let _name: String = String :: from("peocock");
+    let bird: Bird = Bird{name : "pecock".to_owned(), attack : 5};
 
     bird.print_name();
 
