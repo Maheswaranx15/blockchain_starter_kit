@@ -158,3 +158,10 @@ pub fn is_even(num : u8) -> bool {
             println!("{}" ,self.name)
         }
     }
+
+    trait Animal {
+        fn can_fly(&self)->bool;
+        fn is_animal(&self)->bool {
+            true
+        }
+    }
