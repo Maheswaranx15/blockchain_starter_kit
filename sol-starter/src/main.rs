@@ -1,4 +1,5 @@
 use core::num;
+use std::io::BufRead;
 
 fn main() {
     println!("Hello, world!");
@@ -134,8 +135,45 @@ fn main() {
 
     bird.print_name();
 
+    println!("{} , {}",bird.can_fly(),bird.is_animal());
+
+    //ENUM
+    let a : MyEnum = MyEnum::A;
+    println!("{:?}",a);
+    
+    let b : MyEnum = MyEnum::B(90);
+    println!("{:?}",b);
+
+    let c : MyEnum = MyEnum::C{x:9,y:true};
+    println!("{:?}",c);
+
+    if let MyEnum ::B(val) = b {
+        println!("{}",val)
+    }
 
 
+    if let MyEnum ::C{x,y} = c {
+        println!("{},{}",x,y)
+    }
+
+    //Vectors
+
+    let mut vector : Vec<i64> = vec![1,2,3,4,5];
+    println!("{:?}",vector);
+
+    //push
+    vector.push(6);
+    println!("{:?}",vector);
+
+    //length 
+    println!("{:?}",vector.len());
+
+    //remove
+    vector.remove(0);
+    println!("{:?}",vector);
+    
+    //index
+    println!("{:?}",vector[2]);
 }
 
 //write a function to check whether give number is odd or even
@@ -144,6 +182,13 @@ pub fn is_even(num : u8) -> bool {
     digit == 0
 }
 
+    //enum
+    #[derive(Debug)]
+    enum MyEnum {
+        A,
+        B(i32),
+        C{x:i32,y:bool}
+    }
 
     //syntax 
     struct Bird {
@@ -163,5 +208,14 @@ pub fn is_even(num : u8) -> bool {
         fn can_fly(&self)->bool;
         fn is_animal(&self)->bool {
             true
+        }
+    }
+
+    impl Animal for Bird {
+        fn can_fly(&self)->bool {
+            true
+        }
+        fn is_animal(&self)->bool {
+            false
         }
     }
