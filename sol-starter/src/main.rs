@@ -135,8 +135,25 @@ fn main() {
 
     bird.print_name();
 
-    println!("{} , {}",bird.can_fly(),bird.is_animal())
+    println!("{} , {}",bird.can_fly(),bird.is_animal());
 
+    //ENUM
+    let a : MyEnum = MyEnum::A;
+    println!("{:?}",a);
+    
+    let b : MyEnum = MyEnum::B(90);
+    println!("{:?}",b);
+
+    let c : MyEnum = MyEnum::C{x:9,y:true};
+    println!("{:?}",c);
+
+    if let MyEnum ::B(val) = b {
+        println!("{}",val)
+    }
+
+    if let MyEnum ::C{x,y} = c {
+        println!("{},{}",x,y)
+    }
 
 }
 
@@ -146,6 +163,13 @@ pub fn is_even(num : u8) -> bool {
     digit == 0
 }
 
+    //enum
+    #[derive(Debug)]
+    enum MyEnum {
+        A,
+        B(i32),
+        C{x:i32,y:bool}
+    }
 
     //syntax 
     struct Bird {
