@@ -1,4 +1,5 @@
 use core::num;
+use std::io::BufRead;
 
 fn main() {
     println!("Hello, world!");
@@ -134,6 +135,7 @@ fn main() {
 
     bird.print_name();
 
+    println!("{} , {}",bird.can_fly(),bird.is_animal())
 
 
 }
@@ -163,5 +165,14 @@ pub fn is_even(num : u8) -> bool {
         fn can_fly(&self)->bool;
         fn is_animal(&self)->bool {
             true
+        }
+    }
+
+    impl Animal for Bird {
+        fn can_fly(&self)->bool {
+            true
+        }
+        fn is_animal(&self)->bool {
+            false
         }
     }
