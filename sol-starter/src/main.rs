@@ -151,10 +151,29 @@ fn main() {
         println!("{}",val)
     }
 
+
     if let MyEnum ::C{x,y} = c {
         println!("{},{}",x,y)
     }
 
+    //Vectors
+
+    let mut vector : Vec<i64> = vec![1,2,3,4,5];
+    println!("{:?}",vector);
+
+    //push
+    vector.push(6);
+    println!("{:?}",vector);
+
+    //length 
+    println!("{:?}",vector.len());
+
+    //remove
+    vector.remove(0);
+    println!("{:?}",vector);
+    
+    //index
+    println!("{:?}",vector[2]);
 }
 
 //write a function to check whether give number is odd or even
