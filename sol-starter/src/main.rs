@@ -219,17 +219,3 @@ pub fn is_even(num : u8) -> bool {
             false
         }
     }
-
-//     COMMONLY USED EXTERNAL LIBRARIES: This submodule includes:
-// 1. Error Handling
-// 2. Logging
-// 3. Testing
-// 4. Serialization and Deserialization
-// 5. Command Line Applications
-// COMMONLY USED EXTERNAL TOOLS: This submodule includes:
-// 1. cargo-edit
-// 2. cargo-audit
-// 3. cargo-udeps
-// GOING DEEPER: This submodule includes:
-// 1. Web3 / Solana
-// 2. Embedded
