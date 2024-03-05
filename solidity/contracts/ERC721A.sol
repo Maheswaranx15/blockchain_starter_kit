@@ -4,11 +4,11 @@ pragma solidity 0.8.22;
 import "erc721a/contracts/ERC721A.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract ERC721A is ERC721A, Ownable {
+contract iAgent_Nft is ERC721A, Ownable {
     uint256 MAX_MINTS = 1000;
     uint256 MAX_SUPPLY = 20000;
     mapping(address => bool) public whitelist;
-    string public baseURI = "https://ipfs.io/ipfs/";
+    string public _tokenURI = "https://ipfs.io/ipfs/QmePXkCTzXtrqoosat7QQMWzKqeGRLmhv8C6denofMPCjr/";
 
     event AddressAddedToWhitelist(address indexed _address);
     event AddressRemovedFromWhitelist(address indexed _address);
@@ -44,7 +44,6 @@ contract ERC721A is ERC721A, Ownable {
     }
 
     function transferToWhitelisted(address receiver, uint256[] calldata tokenIds) external {
-        require(whitelist[receiver], "Receiver must be whitelisted");
         for (uint256 i = 0; i < tokenIds.length; i++) {
             require(_isApprovedOrOwner(msg.sender, tokenIds[i]), "You are not approved to transfer this token");
             safeTransferFrom(msg.sender, receiver, tokenIds[i]);
@@ -61,8 +60,16 @@ contract ERC721A is ERC721A, Ownable {
         payable(owner()).transfer(address(this).balance);
     }
 
+    function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
+        if (!_exists(tokenId)) revert URIQueryForNonexistentToken();
+
+        string memory baseURI = _baseURI();
+        return bytes(baseURI).length != 0 ? string(abi.encodePacked(baseURI, _toString(tokenId) , ".json")) : '';
+    }
+
+
     function _baseURI() internal view override returns (string memory) {
-        return baseURI;
+        return _tokenURI;
     }
 
 }
