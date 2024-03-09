@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.4;
+pragma solidity 0.8.22;
+
 interface IBEP20 {
   /**
    * @dev Returns the amount of tokens in existence.
@@ -90,8 +91,6 @@ interface IBEP20 {
    */
   event Approval(address indexed owner, address indexed spender, uint256 value);
 }
-
-
 
 contract BridgeBase {
     address public admin;
