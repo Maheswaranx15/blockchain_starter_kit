@@ -4,123 +4,73 @@ const {
 } = require("@nomicfoundation/hardhat-network-helpers");
 const { anyValue } = require("@nomicfoundation/hardhat-chai-matchers/withArgs");
 const { expect } = require("chai");
+const { ethers } = require("hardhat");
+
 
 describe("Lock", function () {
-  // We define a fixture to reuse the same setup in every test.
-  // We use loadFixture to run this setup once, snapshot that state,
-  // and reset Hardhat Network to that snapshot in every test.
-  async function deployOneYearLockFixture() {
-    const ONE_YEAR_IN_SECS = 365 * 24 * 60 * 60;
-    const ONE_GWEI = 1_000_000_000;
 
-    const lockedAmount = ONE_GWEI;
-    const unlockTime = (await time.latest()) + ONE_YEAR_IN_SECS;
-
-    // Contracts are deployed using the first signer/account by default
-    const [owner, otherAccount] = await ethers.getSigners();
-
-    const Lock = await ethers.getContractFactory("Lock");
-    const lock = await Lock.deploy(unlockTime, { value: lockedAmount });
-
-    return { lock, unlockTime, lockedAmount, owner, otherAccount };
-  }
 
   describe("Deployment", function () {
-    it("Should set the right unlockTime", async function () {
-      const { lock, unlockTime } = await loadFixture(deployOneYearLockFixture);
-
-      expect(await lock.unlockTime()).to.equal(unlockTime);
-    });
-
-    it("Should set the right owner", async function () {
-      const { lock, owner } = await loadFixture(deployOneYearLockFixture);
-
-      expect(await lock.owner()).to.equal(owner.address);
-    });
-
-    it("Should receive and store the funds to lock", async function () {
-      const { lock, lockedAmount } = await loadFixture(
-        deployOneYearLockFixture
-      );
-
-      expect(await ethers.provider.getBalance(lock.address)).to.equal(
-        lockedAmount
-      );
-    });
-
+    let hashinstance;
     it("Should fail if the unlockTime is not in the future", async function () {
-      // We don't use the fixture here because we want a different deployment
-      const latestTime = await time.latest();
-      const Lock = await ethers.getContractFactory("Lock");
-      await expect(Lock.deploy(latestTime, { value: 1 })).to.be.revertedWith(
-        "Unlock time should be in the future"
-      );
+      const ConfidentialHash = await ethers.getContractFactory("ConfidentialHash");
+      hashinstance = await ConfidentialHash.deploy();
+      await hashinstance.deployed();
+      console.log("contract address",hashinstance.address)
     });
+
+    it("slot storages",async function () {
+      let firstUser = "ALICE"
+      console.log("Slot 0",`{0x0} - String fit into 32 bytes`,firstUser)
+      let alice_age = 24
+      console.log("Slot 1",`{0x1} - uint/uint256 fit into 32 bytes`,alice_age)
+      let ALICE_PRIVATE_KEY="0xdf57089febbacf7ba0bc227dafbffa9fc08a93fdc68e1e42411a14efcf23656e"; 
+      let ALICE_DATA = "QWxpY2UK";
+      let aliceHash = ethers.utils.solidityKeccak256(['bytes32', 'string'], [ALICE_PRIVATE_KEY, ALICE_DATA]);
+
+      console.log("Slot 2",`{0x2} - bytes32,256 bits`,ALICE_PRIVATE_KEY)
+      console.log("Slot 3",`{0x3} - bytes32,256 bits`,ALICE_DATA)
+      console.log("Slot 4",`{0x4} - bytes32,256 bits`,aliceHash)
+
+      let secondUser = "BOB"
+      console.log("Slot 5",`{0x0} - String fit into 32 bytes`,secondUser)
+      let bob_age = 21
+      console.log("Slot 6",`{0x1} - uint/uint256 fit into 32 bytes`,bob_age)
+      let BOB_PRIVATE_KEY="0xde9be858da4a475276426320d5e9262ecfc3ba460bfac56360bfa6c4c28b4ee0"; 
+      let BOB_DATA = "QWxpY2UK";
+      let bobHash = ethers.utils.solidityKeccak256(['bytes32','string'],[BOB_PRIVATE_KEY, BOB_DATA]);
+      console.log("Slot 7",`{0x7} - bytes32,256 bits`,BOB_PRIVATE_KEY)
+      console.log("Slot 8",`{0x8} - bytes32,256 bits`,BOB_DATA)
+      console.log("Slot 9",`{0x9} - bytes32,256 bits`,bobHash)
+
+      const aliceHash_ = await ethers.provider.getStorageAt(hashinstance.address, ethers.utils.hexValue(4));
+
+      const bobHash_ = await ethers.provider.getStorageAt(hashinstance.address, ethers.utils.hexValue(9));
+
+      console.log(aliceHash_)
+      console.log(bobHash_)
+      const hash = ethers.utils.solidityKeccak256(['bytes32', 'bytes32'], [aliceHash_, bobHash_]);
+      console.log(hash);
+      let checkthehash = await hashinstance.checkthehash(hash)
+      console.log(checkthehash)
+      expect(await hashinstance.checkthehash(hash)).to.be.true;
+
+    })
+    // it("Should fail if the unlockTime is not in the future", async function () {
+    //   let aliceHash = ethers.provider.getStorageAt(hashinstance.address,ethers.utils.hexValue(4))
+    //   let bobHash = ethers.provider.getStorageAt(hashinstance.address,ethers.utils.hexValue(9))
+    //   const hash = ethers.utils.solidityKeccak256(['string', 'string'], [aliceHash, bobHash]);
+
+    //   console.log("hash", hash)
+    //   let expectedhash = await hashinstance.hash(aliceHash,bobHash)
+    //   console.log("hash", expectedhash)
+    //   let checkthehash = await hashinstance.checkthehash(hash)
+    //   console.log(checkthehash)
+    //   // expect(await hashinstance.checkthehash(hash)).to.be.true;
+
+    // });
+
   });
 
-  describe("Withdrawals", function () {
-    describe("Validations", function () {
-      it("Should revert with the right error if called too soon", async function () {
-        const { lock } = await loadFixture(deployOneYearLockFixture);
 
-        await expect(lock.withdraw()).to.be.revertedWith(
-          "You can't withdraw yet"
-        );
-      });
-
-      it("Should revert with the right error if called from another account", async function () {
-        const { lock, unlockTime, otherAccount } = await loadFixture(
-          deployOneYearLockFixture
-        );
-
-        // We can increase the time in Hardhat Network
-        await time.increaseTo(unlockTime);
-
-        // We use lock.connect() to send a transaction from another account
-        await expect(lock.connect(otherAccount).withdraw()).to.be.revertedWith(
-          "You aren't the owner"
-        );
-      });
-
-      it("Shouldn't fail if the unlockTime has arrived and the owner calls it", async function () {
-        const { lock, unlockTime } = await loadFixture(
-          deployOneYearLockFixture
-        );
-
-        // Transactions are sent using the first signer by default
-        await time.increaseTo(unlockTime);
-
-        await expect(lock.withdraw()).not.to.be.reverted;
-      });
-    });
-
-    describe("Events", function () {
-      it("Should emit an event on withdrawals", async function () {
-        const { lock, unlockTime, lockedAmount } = await loadFixture(
-          deployOneYearLockFixture
-        );
-
-        await time.increaseTo(unlockTime);
-
-        await expect(lock.withdraw())
-          .to.emit(lock, "Withdrawal")
-          .withArgs(lockedAmount, anyValue); // We accept any value as `when` arg
-      });
-    });
-
-    describe("Transfers", function () {
-      it("Should transfer the funds to the owner", async function () {
-        const { lock, unlockTime, lockedAmount, owner } = await loadFixture(
-          deployOneYearLockFixture
-        );
-
-        await time.increaseTo(unlockTime);
-
-        await expect(lock.withdraw()).to.changeEtherBalances(
-          [owner, lock],
-          [lockedAmount, -lockedAmount]
-        );
-      });
-    });
-  });
 });
