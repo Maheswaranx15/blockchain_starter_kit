@@ -56,19 +56,7 @@ describe("Lock", function () {
       expect(await hashinstance.checkthehash(hash)).to.be.true;
 
     })
-    // it("Should fail if the unlockTime is not in the future", async function () {
-    //   let aliceHash = ethers.provider.getStorageAt(hashinstance.address,ethers.utils.hexValue(4))
-    //   let bobHash = ethers.provider.getStorageAt(hashinstance.address,ethers.utils.hexValue(9))
-    //   const hash = ethers.utils.solidityKeccak256(['string', 'string'], [aliceHash, bobHash]);
-
-    //   console.log("hash", hash)
-    //   let expectedhash = await hashinstance.hash(aliceHash,bobHash)
-    //   console.log("hash", expectedhash)
-    //   let checkthehash = await hashinstance.checkthehash(hash)
-    //   console.log(checkthehash)
-    //   // expect(await hashinstance.checkthehash(hash)).to.be.true;
-
-    // });
+   
 
   });
 
