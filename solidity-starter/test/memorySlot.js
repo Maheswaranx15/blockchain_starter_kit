@@ -32,15 +32,15 @@ describe("Lock", function () {
       console.log("Slot 3",`{0x3} - bytes32,256 bits`,ALICE_DATA)
       console.log("Slot 4",`{0x4} - bytes32,256 bits`,aliceHash)
 
-      let secondUser = "BOB"
-      console.log("Slot 5",`{0x0} - String fit into 32 bytes`,secondUser)
-      let bob_age = 21
-      console.log("Slot 6",`{0x1} - uint/uint256 fit into 32 bytes`,bob_age)
-      let BOB_PRIVATE_KEY="0xde9be858da4a475276426320d5e9262ecfc3ba460bfac56360bfa6c4c28b4ee0"; 
-      let BOB_DATA = "QWxpY2UK";
-      let bobHash = ethers.utils.solidityKeccak256(['bytes32','string'],[BOB_PRIVATE_KEY, BOB_DATA]);
-      console.log("Slot 7",`{0x7} - bytes32,256 bits`,BOB_PRIVATE_KEY)
-      console.log("Slot 8",`{0x8} - bytes32,256 bits`,BOB_DATA)
+      // let secondUser = "BOB"
+      // console.log("Slot 5",`{0x0} - String fit into 32 bytes`,secondUser)
+      // let bob_age = 21
+      // console.log("Slot 6",`{0x1} - uint/uint256 fit into 32 bytes`,bob_age)
+      // let BOB_PRIVATE_KEY="0xde9be858da4a475276426320d5e9262ecfc3ba460bfac56360bfa6c4c28b4ee0"; 
+      // let BOB_DATA = "QWxpY2UK";
+      // let bobHash = ethers.utils.solidityKeccak256(['bytes32','string'],[BOB_PRIVATE_KEY, BOB_DATA]);
+      // console.log("Slot 7",`{0x7} - bytes32,256 bits`,BOB_PRIVATE_KEY)
+      // console.log("Slot 8",`{0x8} - bytes32,256 bits`,BOB_DATA)
       console.log("Slot 9",`{0x9} - bytes32,256 bits`,bobHash)
 
       const aliceHash_ = await ethers.provider.getStorageAt(hashinstance.address, ethers.utils.hexValue(4));
