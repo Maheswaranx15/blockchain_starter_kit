@@ -4,7 +4,7 @@ const { ethers } = require("hardhat");
 describe("Upgradable Smart Contract", function () {
   let owner, user;
   let logicV1, proxy, logicV2;
-  let proxyContract; 
+  let proxyContract,logicProxy; 
 
   beforeEach(async function () {
     [owner, user] = await ethers.getSigners();
@@ -13,6 +13,8 @@ describe("Upgradable Smart Contract", function () {
 
     // Deploy Proxy with LogicV1 address
     proxyContract = await ethers.deployContract("Proxy",[logicV1.target]);
+
+    logicProxy = await ethers.getContractAt("LogicV1", proxyContract.target);
 
   });
 
@@ -23,9 +25,8 @@ describe("Upgradable Smart Contract", function () {
 
   it("Should upgrade to LogicV2 and retain state", async function () {
     // Set number in LogicV1
-    await proxyContract.setNumber(10);
-    // expect(await proxyContract.getNumber()).to.equal(10);
-
+    await logicProxy.setNumber(10);
+    console.log(await logicProxy.getNumber())
     // // Deploy LogicV2
     // const LogicV2 = await ethers.getContractFactory("LogicV2");
     // logicV2 = await LogicV2.deploy();
