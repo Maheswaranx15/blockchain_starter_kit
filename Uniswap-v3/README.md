@@ -24,3 +24,25 @@ When the price hits the limit range, trigger removal of liquidity and allow user
 3. Frontend Integration
 Allow users to choose a price to "place limit order" instead of a simple swap.
 Show the estimated execution range.
+
+
+
+
+
+The Uniswap v3 Smart Contracts
+Welcome to the Uniswap v3 smart contracts documentation.
+
+The pages here contain guides and technical documentation for the Uniswap v3 Smart Contracts. You can use these docs to learn about the v3 Protocol Smart Contracts and develop on-chain integrations.
+
+Guides
+If you are new to the Uniswap Protocol, we recommend you start with the basic concepts first.
+
+You can then setup your local environment and execute your first swap.
+
+Reference
+For a deeper dive, read through the technical reference docs.
+
+Resources
+v3 Core
+v3 Periphery
+
